@@ -1,17 +1,28 @@
 class HighScores(object):
     """
     A class to maintain a list of high scores, in both chronological and
-    numeric order.
+    numeric order.  Internal sort for numeric order is performed only when
+    a numerically-ordered score is requested.
     """
     def __init__(self, scores=[]):
-        self.scores = scores
-        self.sorted_scores = self.scores
+        self._scores = scores
+        self.sorted_scores = self.scores.copy()
         self.sorted_flag = False
         return
 
+    @property
+    def scores(self):
+        return self._scores
+    
+    @scores.setter
+    def scores(self, scores):
+        self._scores = scores
+        self.sorted_scores = self.scores.copy()
+        self.sorted_flag = False
+
     def add(self, score):
         self.scores.append(score)
-        self.sorted_scores = self.scores
+        self.sorted_scores = self.scores.copy()
         self.sorted_flag = False
         return
 
@@ -19,14 +30,23 @@ class HighScores(object):
         return self.scores[-1] if self.scores else 0
 
     def personal_best(self):
-        if self.sorted_flag == False:
-            self.sorted_scores.sort(reverse=True)
-            self.sorted_flag == True
+        self.update_sort()
         return self.sorted_scores[0] if self.sorted_scores else 0
 
-    def personal_top_three(self):
-        if self.sorted_flag == False:
+    def personal_top_three(self, n=3):
+        self.update_sort()
+        return self.sorted_scores[0:min(n, len(self.sorted_scores))] \
+                                  if self.sorted_scores else 0
+
+    def update_sort(self):
+        if not self.sorted_flag:
             self.sorted_scores.sort(reverse=True)
             self.sorted_flag == True
-        return self.sorted_scores[0:min(3, len(self.sorted_scores))] \
-                                  if self.sorted_scores else 0
+        return
+
+    def __str__(self):
+        topfive = self.personal_top_three(5)
+        suffixes = ['ST', 'ND', 'RD', 'TH', 'TH']
+        score_str = '  |  '.join([f'{i+1} {suffixes[i]} {s:0>5} PTS'
+                                  for i, s in enumerate(topfive)])
+        return f'SCORE RANKING:  {score_str if score_str else "None"}'
