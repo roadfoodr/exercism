@@ -10,7 +10,10 @@ class Phone(object):
         - exchange code begins with a digit from 2-9
     """
     def __init__(self, phone_number):
+        # filter for digits only
         self.number = "".join(re.findall("\d+", phone_number))
+        # remove all leading 1s (country code or invalid start of area code)
+        # or 0s (invalid start of area code)
         self.number = re.sub(r"^[0-1]+", "", self.number)
         self.area_code = self.number[0:3]
         self.exchange_code = self.number[3:6]
@@ -26,4 +29,4 @@ class Phone(object):
         return
         
     def pretty(self):
-        return f"({self.area_code}) {self.number[3:6]}-{self.number[6:]}"
+        return f"({self.area_code}) {self.exchange_code}-{self.number[6:]}"

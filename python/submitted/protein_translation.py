@@ -3,8 +3,9 @@ def proteins(strand):
     Returns a list of proteins found in a DNA strand, in order
     of their appearance in the strand.
     '''
-    codons = {}
     proteins_list = []
+    # pre-processing begin
+    codons = {}
     codon_text = '''
         Codon	Protein
         AUG	Methionine
@@ -23,6 +24,7 @@ def proteins(strand):
             continue
         for word in words[0:-1]:
             codons[word] = words[-1]
+    # pre-processing end
 
     for i in range(0, len(strand), 3):
         protein = codons.get(strand[i:i+3])
