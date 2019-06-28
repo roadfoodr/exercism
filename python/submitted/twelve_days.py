@@ -1,10 +1,3 @@
-def recite(start_verse, end_verse):
-    """
-    Return a list of the specified verses of 'The Twelve Days of Christmas'.
-    """
-    return [verse(v) for v in range(start_verse, end_verse + 1)]
-
-
 #setup begin
 NUMBERS = (
         ('zeroth', 'zero'),
@@ -54,10 +47,17 @@ def verse(verse_num):
             f'{"and " if v == 2 else ""}'
             for v in range(verse_num, 0, -1)
             ]
-    
+
     return(
             f'On the {ordinal(verse_num)} day of Christmas '
             f'my true love gave to me: {"".join(parts)}.'
             )
 
 #setup end
+
+
+def recite(start_verse, end_verse):
+    """
+    Return a list of the specified verses of 'The Twelve Days of Christmas'.
+    """
+    return [verse(v) for v in range(start_verse, end_verse + 1)]
