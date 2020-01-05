@@ -10,15 +10,14 @@ class Luhn:
         self.card_num = card_num
         
     def valid(self):
-        card_chars = ''.join(self.card_num.split())
-        card_digits = [c for c in card_chars if c.isdigit()]
+        card_digits = ''.join(self.card_num.split())
         
-        if len(card_digits) < 2:
+        if not card_digits.isnumeric():
             return False
-        elif len(card_digits) != len(card_chars):
+        elif len(card_digits) < 2:
             return False
         else:
-            card_digits = np.array(card_digits, dtype='int32')
+            card_digits = np.array(list(card_digits), dtype='int32')
             # Step 1: double every second digit, starting from the right
             card_digits[-2::-2] = card_digits[-2::-2] * 2
             # Step 2: subtract 9 from any numbers that are now greater than 9
